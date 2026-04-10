@@ -19,7 +19,7 @@
 无需安装任何环境，只需三步：
 
 1. **克隆项目**  
-   git clone \[https://github.com/whydoIneedaname-cyber/fun-sudoku.git\](https://github.com/whydoIneedaname-cyber/fun-sudoku.git)
+   git clone \[https://github.com/whydoIneedaname-cyber/fun-sudoku.git\] (https://github.com/whydoIneedaname-cyber/fun-sudoku.git)
 
 2. **进入目录**  
    cd sudoku-game
