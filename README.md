@@ -19,13 +19,14 @@
 无需安装任何环境，只需三步：
 
 1. **克隆项目**  
-   git clone \[https://github.com/whydoIneedaname-cyber/fun-sudoku.git\] (https://github.com/whydoIneedaname-cyber/fun-sudoku.git)
+   git clone [https://github.com/whydoIneedaname-cyber/fun-sudoku.git](https://github.com/whydoIneedaname-cyber/fun-sudoku.git)
+
 
 2. **进入目录**  
-   cd sudoku-game
+   cd fun-sudoku
 
 3. **运行游戏**  
-   直接在浏览器中双击 index.html 即可开始挑战！
+   直接在浏览器中双击 sudoko.html 即可开始挑战！
 
 ## **🛠️ 技术实现**
 
