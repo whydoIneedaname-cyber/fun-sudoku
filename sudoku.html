@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>数独游戏 - Sudoku Game</title>
+    <meta name="description" content="我什么都读™ 在线数独游戏，支持多种难度，提示系统，笔记功能，统计追踪">
+ 
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🎮 数独游戏 Sudoku</h1>
+            <p style="color: #64748b; font-size: 0.875rem;">挑战你的逻辑思维</p>
+        </div>
+
+        <div class="game-info">
+            <div class="info-item">
+                <span>⏱️</span>
+                <span class="timer" id="timer">00:00</span>
+            </div>
+            <div class="info-item">
+                <span>🎯</span>
+                <span id="difficulty-display" class="difficulty-badge difficulty-medium">中等</span>
+            </div>
+            <div class="info-item">
+                <span>❌</span>
+                <span id="errors-display">0 / 3</span>
+            </div>
+            <div class="info-item">
+                <span>💡</span>
+                <span id="hints-display">10</span>
+            </div>
+        </div>
+
+        <div class="board-container">
+            <div class="sudoku-board" id="board"></div>
+        </div>
+
+        <div class="number-pad"></div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>游戏控制</label>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="game.newGame()">
+                        <span>🎮</span> 新游戏
+                    </button>
+                    <button class="btn btn-secondary" onclick="game.togglePause()" id="pauseBtn">
+                        <span>⏸️</span> 暂停
+                    </button>
+                    <button class="btn btn-outline" onclick="game.showStats()">
+                        <span>📊</span> 统计
+                    </button>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>辅助功能</label>
+                <div class="button-group">
+                    <button class="btn btn-warning" onclick="game.getHint()">
+                        <span>💡</span> 提示
+                    </button>
+                    <button class="btn btn-outline" onclick="game.toggleNotes()" id="notesBtn">
+                        <span>✏️</span> 笔记
+                    </button>
+                    <button class="btn btn-outline" onclick="game.checkErrors()">
+                        <span>✔️</span> 检查
+                    </button>
+                    <button class="btn btn-outline" onclick="game.undoMove()">
+                        <span>↩️</span> 撤销
+                    </button>
+                    <button class="btn btn-outline" onclick="game.printPuzzle()">
+                        <span>🖨️</span> 打印
+                    </button>
+                    <button class="btn btn-outline" onclick="game.showSaveLoad()">
+                        <span>💾</span> 存档
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+            <a href="/" class="btn btn-outline" style="text-decoration: none; display: inline-flex;">
+                <span>🏠</span> 返回主页
+            </a>
+        </div>
+
+        <div class="copyright">
+            <p>© 2026 我什么都读™. All rights reserved.</p>
+            <p>
+                页面内容采用
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International (CC BY-NC-SA 4.0)</a>
+                许可协议。
+            </p>
+        </div>
+    </div>
+
+    <!-- 新游戏模态框 -->
+    <div class="modal" id="newGameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎮 开始新游戏</h2>
+                <p style="color: #64748b; font-size: 0.875rem;">选择难度等级</p>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; gap: 0.75rem;">
+                    <button class="btn btn-primary" onclick="game.startNewGame('easy')" style="justify-content: flex-start;">
+                        <span style="font-size: 1.5rem;">🟢</span>
+                        <div style="text-align: left;">
+                            <div>简单 Easy</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">40-45 个提示</div>
+                        </div>
+                    </button>
+                    <button class="btn btn-secondary" onclick="game.startNewGame('medium')" style="justify-content: flex-start;">
+                        <span style="font-size: 1.5rem;">🟡</span>
+                        <div style="text-align: left;">
+                            <div>中等 Medium</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">30-35 个提示</div>
+                        </div>
+                    </button>
+                    <button class="btn btn-warning" onclick="game.startNewGame('hard')" style="justify-content: flex-start;">
+                        <span style="font-size: 1.5rem;">🟠</span>
+                        <div style="text-align: left;">
+                            <div>困难 Hard</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">25-30 个提示</div>
+                        </div>
+                    </button>
+                    <button class="btn" onclick="game.startNewGame('expert')" style="background: #7c3aed; color: white; justify-content: flex-start;">
+                        <span style="font-size: 1.5rem;">🔴</span>
+                        <div style="text-align: left;">
+                            <div>专家 Expert</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">20-25 个提示</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="game.closeModal('newGameModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计模态框 -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 游戏统计</h2>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid" id="statsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="game.resetStats()">重置统计</button>
+                <button class="btn btn-primary" onclick="game.closeModal('statsModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 存档/读档模态框 -->
+    <div class="modal" id="saveLoadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💾 存档管理</h2>
+            </div>
+            <div class="modal-body">
+                <div id="saveSlots" style="display: grid; gap: 0.75rem;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="game.closeModal('saveLoadModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 胜利模态框 -->
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+                <h2>恭喜！游戏完成！</h2>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid" id="winStats"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="game.closeModal('winModal')">关闭</button>
+                <button class="btn btn-primary" onclick="game.closeModal('winModal'); game.newGame()">再来一局</button>
+            </div>
+        </div>
+        <div class="board-container">
+            <div class="sudoku-board" id="board"></div>
+        </div>
+    </div>
+
+    
+<script src="script.js"></script> 
+</body>
+</html>
